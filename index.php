@@ -164,7 +164,7 @@
 
     <?php endif; ?>
 
-    <form class="form-contact" action="./contacto.php" method="post">
+    <form class="form-contact" action="./index.php" method="post">
         <h1 class="form-contact__title">Contáctanos!!</h1>
         <div class="form-contact__input-group">
             <label class="form-contact__label" for="name">Nombre</label>
