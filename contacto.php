@@ -1,4 +1,7 @@
 <?php
+
+    require("mail.php");
+
     function validate($name, $email, $subject, $msg, $form){
         return !empty($name) && !empty($email) && !empty($subject) && !empty($msg);
     }
@@ -17,8 +20,13 @@
             $subject = sanitize($_POST["subject"]);
             $msg = sanitize($_POST["msg"]);
             
-
-            $status = "danger";
+            $body = "<h2>$name te envía el siguiente mensaje</h2><br>
+                        $msg <br>
+                    <p>Correo electrónico del remitente: $email </p>";
+            
+            $response = sendEmail($subject, $body, $email, $name, true);
+            
+            ($response->sent)? $status = "success" : $status = "danger";
         } else{
             $status = "warning";
         }
@@ -48,10 +56,12 @@
             align-items: center;
 
             width: 100%;
-            height: 100vh;
-            background-image: url("./img/background.svg");
-            object-fit: cover; 
-
+            height: auto;
+            min-height: 100vh;
+            padding: 24px 0;
+            
+            background-image: url(./img/background.svg);
+            object-fit: cover;
             font-family: 'Sono', sans-serif;
         }
         .alert {
@@ -133,7 +143,7 @@
     <?php if($status == "success"): ?>
 
     <div class="alert alert--success">
-        <p>El mensaje ha sido enviado exitosamente</p>
+        <p><?= $response->msg ?></p>
     </div>
 
     <?php endif; ?>
@@ -141,7 +151,7 @@
     <?php if($status == "warnig"): ?>
 
     <div class="alert alert--warning">
-        <p>Ocurrio un error al enviar el mensaje: </p>
+        <p>Ocurrio un error al validar sus datos</p>
     </div>
 
     <?php endif; ?>
@@ -149,7 +159,7 @@
     <?php if($status == "danger"): ?>  
           
     <div class="alert alert--danger">
-        <p>Ocurrio un error al validar sus datos</p>
+        <p><?= $response->msg ?></p>
     </div>
 
     <?php endif; ?>
